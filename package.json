@@ -1,0 +1,25 @@
+{
+  "Name": "shortcut.exe",
+  "version": "1.0.0",
+  "description": "what are you looking for?",
+  "main": "bot.js",
+  "scripts": {
+    "start": "node .",
+    "dev": "nodemon bot.js"
+  },
+  "author": "@/^[]a",
+  "Dependências": {},
+  "dependencies": {
+    "discord.io": "^2.5.3",
+    "discord.js": "^12.2.0",
+    "dotenv": "^10.0.0",
+    "graphql": "^15.5.3",
+    "node-cron": "^3.0.0",
+    "puppeteer": "^10.2.0",
+    "react": "^17.0.2",
+    "winston": "^3.3.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
