@@ -23,6 +23,8 @@ let year = date_ob.getFullYear();
 let hours = date_ob.getHours();
 let minutes = date_ob.getMinutes();
 
+let automaticReply = false;
+
 //  opens puppeteer and stores the print
 const sendImage = async (client, dateNow, size) => {
   const browser = await puppeteer.launch({
@@ -204,15 +206,55 @@ client.on("message", async msg => {
 client.on("message", async msg => {
   let message = msg.content.split("|")
 
-  if (message[0] === "Name: UAT-06 15m * " && hours > 13) {
-    await msg.react("👀");
-    await msg.channel.send("💾 || loading print... (cliente: ideal-uat)");
+  if (message[0] === "Name: UAT-06 15m * " && automaticReply == false) {
+    await msg.channel.send("💾 || As respostas automáticas não estão ativadas...");
+  }
+  if (message[0] === "Name: UAT-06 15m * " && automaticReply == true) {
+    try {
+      await msg.react("👀");
+      await msg.channel.send("💾 || loading print... (cliente: ideal-uat)");
+  
+      await sendImage("ideal-uat", hours + '-' + minutes, "regular")
+  
+      console.log('Print sent (ideal-uat)')
+      msg.reply("💾 || here it is", {files: ['./prints/print_ideal-uat_' + hours + '-' + minutes + '.png']});
+  
+    } catch (error) {
+      msg.channel.send("💾 || houve um erro :(... ( " + error + " )");
+    
+    }
+  }
+})
 
-    await sendImage("ideal-uat", hours + '-' + minutes, "regular")
+// ativa resposta automática após mensagem do outro bot
+client.on("message", async msg => {
 
-    console.log('Print sent (ideal-uat)')
-    msg.reply("💾 || here it is", {files: ['./prints/print_ideal-uat_' + hours + '-' + minutes + '.png']});
+  if (msg.content === "$enable automaticReply") {
+    try {
+      await msg.react("✅");
 
+      automaticReply = true;
+      await msg.channel.send("💾 || Resposta automática ativadas!");
+
+    } catch (error) {
+      await msg.react("⛔");
+      msg.channel.send("💾 || houve um erro :(... ( " + error + " )");
+      
+    }
+  }
+
+  if (msg.content === "$disable automaticReply") {
+    try {
+      await msg.react("✅");
+
+      automaticReply = false;
+      await msg.channel.send("💾 || Resposta automática desativada!");
+
+    } catch (error) {
+      await msg.react("⛔");
+      msg.channel.send("💾 || houve um erro :(... ( " + error + " )");
+      
+    }
   }
 })
 
